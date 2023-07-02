@@ -8,8 +8,8 @@ ob_start();
 
 define('DBHOST','localhost');
 define('DBUSER','root');
-define('DBPASS','manibharathi');
-define('DBNAME','inventory_db_aravinth');
+define('DBPASS','');
+define('DBNAME','bills');
 
 $db = new PDO("mysql:host=".DBHOST.";dbname=".DBNAME, DBUSER, DBPASS);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

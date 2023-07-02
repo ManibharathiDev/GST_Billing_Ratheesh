@@ -1,4 +1,5 @@
 <?php
+	error_reporting(E_ALL ^ (E_NOTICE | E_WARNING | E_DEPRECATED));
     ob_start();
 	include('includes/config.php');
 	require('fpdf/fpdf.php');
@@ -44,19 +45,20 @@
 		//$pdf = new FPDF('L','mm','A4');
 		$pdf->AddPage();
 		$pdf->SetFontSize(25);
-		$pdf->Cell(145,8,$crow['compName'],0,'C');
+		$pdf->Cell(190,8,$crow['compName'],0,0,'C',0);
+		$pdf->Ln();
 		$pdf->SetFontSize(10);
 		if($clientstatus == 1){
-		$pdf->Cell(20,8,"GSTIN No",0,'C');
-		$pdf->Cell(2,8,": ",0,'C');
-		$pdf->Cell(15,8,$crow['compGSTIN'],0,'C');
+		$pdf->Cell(20,8,"GSTIN No",0,0,'R',0);
+		$pdf->Cell(2,8,": ",0,0,'R',0);
+		$pdf->Cell(15,8,$crow['compGSTIN'],0,1,'L',0);
 		}
 		$pdf->Ln();
-		$pdf->Cell(145,8,$crow['compAddress'].','.$crow['compCity'].','.$crow['stateName'].'-'.$crow['compPin'],0,'C');
+		$pdf->Cell(145,8,$crow['compAddress'].','.$crow['compCity'].','.$crow['stateName'].'-'.$crow['compPin'],0,0,'C',0);
 		if($clientstatus == 1){
-		$pdf->Cell(20,8,"State Code",0,'C');
-		$pdf->Cell(2,8,": ",0,'C');
-		$pdf->Cell(15,8,'TN/33',0,'C');
+		$pdf->Cell(20,8,"State Code",0,0,'C',0);
+		$pdf->Cell(2,8,": ",0,0,'C',0);
+		$pdf->Cell(15,8,'TN/33',0,0,'C',0);
 		}
 		$pdf->SetLineWidth(0);
 		$pdf->Ln();
@@ -64,22 +66,22 @@
 		$pdf->SetLineWidth(0);
 		$pdf->SetFontSize(10);
 		$pdf->Ln();
-		$pdf->Cell(25,8,"Bill Date.",0,'C');
-		$pdf->Cell(2,8,": ",0,'C');
+		$pdf->Cell(25,8,"Bill Date.",0,0,'C',0);
+		$pdf->Cell(2,8,": ",0,0,'C',0);;
 		if(isset($_GET['flag'])){
 			$selectedDate = strtr($drow['billDate'], '/', '-');
 			$selectedDate=date('d-m-Y',strtotime($selectedDate));
-			$pdf->Cell(15,8,$selectedDate,0,'C');
+			$pdf->Cell(15,8,$selectedDate,0,0,'C',0);
 		}
 		else
 		{
-		$pdf->Cell(15,8,$tdate,0,'C');
+		$pdf->Cell(15,8,$tdate,0,0,'C',0);
 		}
-		$pdf->Cell(100,8,"",0,'C');
-		$pdf->Cell(25,8,"Invoice No.",0,'C');
+		$pdf->Cell(100,8,"",0,0,'C',0);
+		$pdf->Cell(25,8,"Invoice No.",0,0,'C',0);
 		$sno = $_GET['sno'];
-		$pdf->Cell(2,8,": ",0,'C');
-		$pdf->Cell(15,8,$sno,0,'C');
+		$pdf->Cell(2,8,": ",0,0,'C',0);
+		$pdf->Cell(15,8,$sno,0,0,'C',0);
 		$pdf->Ln();
 		$cusid = $_GET['cusid'];
 		$csquery = "SELECT * FROM `tbl_client` WHERE clientId = :id";
@@ -87,38 +89,38 @@
 		$cstmt->bindparam(":id",$cusid);
 		$cstmt->execute();
 		$csrow = $cstmt->fetch(PDO::FETCH_ASSOC);
-		$pdf->Cell(65,8,"Details of Receiver(Billed To)",0,'C');
-		$pdf->Cell(50,8,"",0,'C');
-		$pdf->Cell(70,8,"Details of Consignee(Shipped To)",0,'C');
+		$pdf->Cell(65,8,"Details of Receiver(Billed To)",0,0,'L',0);
+		$pdf->Cell(50,8,"",0,0,'C',0);
+		$pdf->Cell(70,8,"Details of Consignee(Shipped To)",0,0,'R',0);
 		$pdf->Ln();
-		$pdf->Cell(33,8,"Name",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
-		$pdf->Cell(80,8,$csrow['clientName'],0,'C');
-		$pdf->Cell(33,8,"Name",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
-		$pdf->Cell(80,8,$csrow['clientName'],0,'C');
+		$pdf->Cell(33,8,"Name",0,0,'L',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
+		$pdf->Cell(80,8,$csrow['clientName'],0,0,'L',0);
+		$pdf->Cell(33,8,"Name",0,0,'R',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
+		$pdf->Cell(80,8,$csrow['clientName'],0,0,'L',0);
 		$pdf->Ln();
-		$pdf->Cell(33,8,"Address",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
-		$pdf->Cell(80,8,$csrow['clientBillingAdd'],0,'C');
-		$pdf->Cell(33,8,"Address",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
-		$pdf->Cell(80,8,$csrow['clientShippingAdd'],0,'C');
+		$pdf->Cell(33,8,"Address",0,0,'L',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
+		$pdf->Cell(80,8,$csrow['clientBillingAdd'],0,0,'L',0);
+		$pdf->Cell(33,8,"Address",0,0,'R',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
+		$pdf->Cell(80,8,$csrow['clientShippingAdd'],0,0,'L',0);
 		$pdf->Ln();
-		$pdf->Cell(33,8,"State",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
+		$pdf->Cell(33,8,"State",0,0,'L',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
 		$state = $csrow['clientBillingState'];
 		$stquery = "SELECT * FROM tbl_state where stateDigit = :stdigit";
 		$ststmt = $db->prepare($stquery);
 		$ststmt->bindparam(":stdigit",$state);
 		$ststmt->execute();
 		$strow = $ststmt->fetch(PDO::FETCH_ASSOC);
-		$pdf->Cell(80,8,$strow['stateName'],0,'C');
-		$pdf->Cell(33,8,"State",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
+		$pdf->Cell(80,8,$strow['stateName'],0,0,'L',0);
+		$pdf->Cell(33,8,"State",0,0,'R',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
 		if($csrow['clientShipping'] == 0)
 		{
-			$pdf->Cell(80,8,$strow['stateName'],0,'C');
+			$pdf->Cell(80,8,$strow['stateName'],0,0,'L',0);
 		}
 		else
 		{
@@ -128,66 +130,67 @@
 			$cststmt->bindparam(":stdigit",$cstate);
 			$cststmt->execute();
 			$cstrow = $cststmt->fetch(PDO::FETCH_ASSOC);
-			$pdf->Cell(80,8,$cstrow['stateName'],0,'C');
+			$pdf->Cell(80,8,$cstrow['stateName'],0,0,'L',0);
 		}
 		$pdf->Ln();
 		if($clientstatus == 1){
-		$pdf->Cell(33,8,"State Code",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
-		$pdf->Cell(80,8,$strow['stateCode'].'/'.$strow['stateDigit'],0,'C');
-		$pdf->Cell(33,8,"State Code",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
+		$pdf->Cell(33,8,"State Code",0,0,'L',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
+		$pdf->Cell(80,8,$strow['stateCode'].'/'.$strow['stateDigit'],0,0,'L',0);
+		$pdf->Cell(33,8,"State Code",0,0,'R',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
 		if($csrow['clientShipping'] == 0)
 		{
-			$pdf->Cell(80,8,$strow['stateCode'].'/'.$strow['stateDigit'],0,'C');
+			$pdf->Cell(80,8,$strow['stateCode'].'/'.$strow['stateDigit'],0,0,'L',0);
 			$billstate = $strow['stateDigit'];
 		}
 		else
 		{
-			$pdf->Cell(80,8,$strow['stateCode'].'/'.$strow['stateDigit'],0,'C');
+			$pdf->Cell(80,8,$strow['stateCode'].'/'.$strow['stateDigit'],0,0,'L',0);
 			$billstate = $cstrow['stateDigit'];
 		}
 		$pdf->Ln();
-		$pdf->Cell(33,8,"GSTIN / Unique ID",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
-		$pdf->Cell(80,8,$csrow['clientGSTIN'],0,'C');
-		$pdf->Cell(33,8,"GSTIN / Unique ID",0,'C');
-		$pdf->Cell(2,8,":",0,'C');
-		$pdf->Cell(80,8,$csrow['clientGSTIN'],0,'C');
+		$pdf->Cell(33,8,"GSTIN / Unique ID",0,0,'L',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
+		$pdf->Cell(80,8,$csrow['clientGSTIN'],0,0,'L',0);
+		$pdf->Cell(33,8,"GSTIN / Unique ID",0,0,'R',0);
+		$pdf->Cell(2,8,":",0,0,'C',0);
+		$pdf->Cell(80,8,$csrow['clientGSTIN'],0,0,'L',0);
 		
 		$pdf->Ln();
 		$pdf->Ln();
 		}
 		
 		$pdf->SetFontSize(8);
-		$pdf->Cell(10,16,"Sr.No",1,0,'C');
-		$pdf->Cell(40,16,"Item Description",1,0,'C');
-		$pdf->Cell(15,16,"HSN",1,0,'C');
-		$pdf->Cell(10,16,"Qty.",1,0,'C');
+		$pdf->Cell(10,16,"Sr.No",1,0,'C',0);
+		$pdf->Cell(40,16,"Item Description",1,0,'C',0);
+		$pdf->Cell(15,16,"HSN",1,0,'C',0);
+		$pdf->Cell(10,16,"Qty.",1,0,'C',0);
 		/*$pdf->Cell(10,16,"Unit.",1,0,'C');*/
-		$pdf->Cell(10,16,"Rate.",1,0,'C');
-		$pdf->Cell(10,16,"Total.",1,0,'C');
-		$pdf->Cell(15,16,"Discount.",1,0,'C');
-		$pdf->Cell(21,16,"Taxable Value.",1,0,'C');
-		$pdf->Cell(21,8,"CGST",1,0,'C');
-		$pdf->Cell(21,8,"SGST",1,0,'C');
-		$pdf->Cell(21,8,"IGST",1,0,'C');
+		$pdf->Cell(10,16,"Rate.",1,0,'C',0);
+		$pdf->Cell(10,16,"Total.",1,0,'C',0);
+		$pdf->Cell(15,16,"Discount.",1,0,'C',0);
+		$pdf->Cell(21,16,"Taxable Value.",1,0,'C',0);
+		$pdf->Cell(21,8,"CGST",1,0,'C',0);
+		$pdf->Cell(21,8,"SGST",1,0,'C',0);
+		$pdf->Cell(21,8,"IGST",1,0,'C',0);
 		$pdf->Ln();
-		$pdf->Cell(10,8,"",0,'C');
-		$pdf->Cell(30,8,"",0,'C');
-		$pdf->Cell(15,8,"",0,'C');
-		$pdf->Cell(10,8,"",0,'C');
-		$pdf->Cell(10,8,"",0,'C');
-		$pdf->Cell(10,8,"",0,'C');
-		$pdf->Cell(10,8,"",0,'C');
-		$pdf->Cell(15,8,"",0,'C');
-		$pdf->Cell(21,8,"",0,'C');
-		$pdf->Cell(10,8,"Rate",1,0,'C');
-		$pdf->Cell(11,8,"Amt.",1,0,'C');
-		$pdf->Cell(10,8,"Rate",1,0,'C');
-		$pdf->Cell(11,8,"Amt.",1,0,'C');
-		$pdf->Cell(10,8,"Rate",1,0,'C');
-		$pdf->Cell(11,8,"Amt.",1,0,'C');
+
+		$pdf->Cell(10,8,"",0,0,'C',0);
+		$pdf->Cell(30,8,"",0,0,'C',0);
+		$pdf->Cell(15,8,"",0,0,'C',0);
+		$pdf->Cell(10,8,"",0,0,'C',0);
+		$pdf->Cell(10,8,"",0,0,'C',0);
+		$pdf->Cell(10,8,"",0,0,'C',0);
+		$pdf->Cell(10,8,"",0,0,'C',0);
+		$pdf->Cell(15,8,"",0,0,'C',0);
+		$pdf->Cell(21,8,"",0,0,'C',0);
+		$pdf->Cell(10,8,"Rate",1,0,'C',0);
+		$pdf->Cell(11,8,"Amt.",1,0,'C',0);
+		$pdf->Cell(10,8,"Rate",1,0,'C',0);
+		$pdf->Cell(11,8,"Amt.",1,0,'C',0);
+		 $pdf->Cell(10,8,"Rate",1,0,'C',0);
+		 $pdf->Cell(11,8,"Amt.",1,0,'C',0);
 		$pdf->Ln();
 		
 		$itemid = $_GET['itemid'];
@@ -221,22 +224,22 @@
 			$istmt->bindparam(":productid",$pid);
 			$istmt->execute();
 			$row = $istmt->fetch(PDO::FETCH_ASSOC);
-		$pdf->Cell(10,8,$i,1,'C');
+		$pdf->Cell(10,8,$i,1,0,'C',0);
 		//$pdf->Multicell(40,8,"This is a multi-line text string\nNew line\nNew line",1,'C'); 
-		$pdf->Cell(40,8,$row['itemName'].' '.$row['brandName'],1,'C');
-		$pdf->Cell(15,8,$row['itemHSN'],1,'C');
-		$pdf->Cell(10,8,$qty[$index],1,'C');
+		$pdf->Cell(40,8,$row['itemName'].' '.$row['brandName'],1,0,'C',0);
+		$pdf->Cell(15,8,$row['itemHSN'],1,0,'C',0);
+		$pdf->Cell(10,8,$qty[$index],1,0,'C',0);
 		$tqty += $qty[$index];
 		/*$pdf->Cell(10,8,"",1,'C');*/
-		$pdf->Cell(10,8,$price[$index],1,'C');
+		$pdf->Cell(10,8,$price[$index],1,0,'C',0);
 		$total = $price[$index]*$qty[$index];
 		$totalrate += $total;
-		$pdf->Cell(10,8,$total,1,'C');
+		$pdf->Cell(10,8,$total,1,0,'C',0);
 		$totaldiscount += $dis[$index];
-		$pdf->Cell(15,8,$dis[$index],1,'C');
+		$pdf->Cell(15,8,$dis[$index],1,0,'C',0);
 		$tvalue = $total - $dis[$index];
 		$totataxvalue += $tvalue;
-		$pdf->Cell(21,8,$tvalue,1,'C');
+		$pdf->Cell(21,8,$tvalue,1,0,'C',0);
 			$tstmt = $db->prepare($tquery);
 			$taxid = $tax[$index];
 			$tstmt->bindparam(":taxid",$taxid);
@@ -261,69 +264,69 @@
 				$totaligst += $invalue;
 				$gst += $invalue;
 			}
-		$pdf->Cell(10,8,$irgst,1,'C');
-		$pdf->Cell(11,8,$ivalue,1,'C');
-		$pdf->Cell(10,8,$irgst,1,'C');
-		$pdf->Cell(11,8,$ivalue,1,'C');
-		$pdf->Cell(10,8,$igst,1,'C');
-		$pdf->Cell(11,8,$invalue,1,'C');
+		$pdf->Cell(10,8,$irgst,1,0,'C',0);
+		$pdf->Cell(11,8,$ivalue,1,0,'C',0);
+		$pdf->Cell(10,8,$irgst,1,0,'C',0);
+		$pdf->Cell(11,8,$ivalue,1,0,'C',0);
+		$pdf->Cell(10,8,$igst,1,0,'C',0);
+		$pdf->Cell(11,8,$invalue,1,0,'C',0);
 		$pdf->Ln();
 		}
-		$pdf->Cell(10,8,"",1,'C');
-		$pdf->Cell(55,8,"Total Quantity(Nos)",1,'C');
+		$pdf->Cell(10,8,"",1,0,'C',0);
+		$pdf->Cell(55,8,"Total Quantity(Nos)",1,0,'C',0);
 		//$pdf->Cell(15,8,"",1,'C');
-		$pdf->Cell(10,8,$tqty,1,'C');
+		$pdf->Cell(10,8,$tqty,1,0,'C',0);
 		/*$pdf->Cell(10,8,"",1,'C');*/
-		$pdf->Cell(10,8,"Total",1,'C');
-		$pdf->Cell(10,8,$totalrate,1,'C');
-		$pdf->Cell(15,8,$totaldiscount,1,'C');
+		$pdf->Cell(10,8,"Total",1,0,'C',0);
+		$pdf->Cell(10,8,$totalrate,1,0,'C',0);
+		$pdf->Cell(15,8,$totaldiscount,1,0,'C',0);
 		/*if($itemdismode == 1)
 			$pdf->Cell(15,8,$totaldiscount." %",1,'C');
 		else
 			$pdf->Cell(15,8,$totaldiscount,1,'C');*/
-		$pdf->Cell(21,8,$totataxvalue,1,'C');
-		$pdf->Cell(21,8,$totalcsgst,1,0,'C');
-		$pdf->Cell(21,8,$totalcsgst,1,0,'C');
-		$pdf->Cell(21,8,$totaligst,1,0,'C');
+		$pdf->Cell(21,8,$totataxvalue,1,0,'C',0);
+		$pdf->Cell(21,8,$totalcsgst,1,0,'C',0);
+		$pdf->Cell(21,8,$totalcsgst,1,0,'C',0);
+		$pdf->Cell(21,8,$totaligst,1,0,'C',0);
 		$pdf->Ln();
 		$gtotal = $totataxvalue + $gst;
 		//$gtotal = $totataxvalue;
-		$pdf->Cell(95,8,"Total Invoice Value (In Figure)",1,'C');
+		$pdf->Cell(95,8,"Total Invoice Value (In Figure)",1,0,'R',0);
 		
 		
 		
-		$pdf->Cell(99,8,"Rs. ".$gtotal,1,'C');
+		$pdf->Cell(99,8,"Rs. ".$gtotal,1,0,'L',0);
 		$pdf->Ln();
-		$pdf->Cell(95,8,"Total Invoice Value (In Words)",1,'C');
+		$pdf->Cell(95,8,"Total Invoice Value (In Words)",1,0,'R',0);
 		
 		
 		$wtotal = convert_number_to_words($gtotal);
-		$pdf->Cell(99,8,$wtotal,1,'C');
+		$pdf->Cell(99,8,$wtotal,1,0,'L',0);
 		$pdf->Ln();
-		$pdf->Cell(95,8,"Total Paid",1,'C');
+		$pdf->Cell(95,8,"Total Paid",1,0,'R',0);
 		$tpaid = $_GET['paidamount'];
 		if($tpaid == "")
 		{
 			$tpaid = 0.00;
 		}
-		$pdf->Cell(99,8,"Rs. ".$tpaid,1,'C');
+		$pdf->Cell(99,8,"Rs. ".$tpaid,1,0,'L',0);
 		$pdf->Ln();
-		$pdf->Cell(95,8,"Balance",1,'C');
+		$pdf->Cell(95,8,"Balance",1,0,'R',0);
 		$balance = $gtotal - $tpaid;
-		$pdf->Cell(99,8,"Rs. ".$balance,1,'C');
+		$pdf->Cell(99,8,"Rs. ".$balance,1,0,'L',0);
 		$pdf->Ln();
-		$pdf->Cell(110,8,"Amount of Tax Subject to Reverse Charges",1,'C');
+		$pdf->Cell(110,8,"Amount of Tax Subject to Reverse Charges",1,0,'L',0);
 		
-		$pdf->Cell(21,8,"",1,'C');
-		$pdf->Cell(21,8,"",1,0,'C');
-		$pdf->Cell(21,8,"",1,0,'C');
-		$pdf->Cell(21,8,"",1,0,'C');
+		$pdf->Cell(21,8,"",1,0,'C',0);
+		$pdf->Cell(21,8,"",1,0,'C',0);
+		$pdf->Cell(21,8,"",1,0,'C',0);
+		$pdf->Cell(21,8,"",1,0,'C',0);
 		$pdf->Ln();
 		$pdf->Ln();
-		$pdf->Cell(0,8,"Declaration:",0,'C');
+		$pdf->Cell(0,8,"Declaration:",0,0,'R',0);
 		$pdf->Ln();
 		$pdf->Ln();
-		$pdf->Cell(100,8,"Name of the Signature",0,'R');
+		$pdf->Cell(145,8,"Name of the Signature",0,0,'R',0);
 		$pdf->Output();
 		function convert_number_to_words($number) 
 		{
@@ -437,5 +440,5 @@
 
     return $string;
 }
-ob_end_flush(); 
+ob_end_flush();
 ?>
