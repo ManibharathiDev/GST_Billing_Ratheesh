@@ -1,0 +1,18 @@
+[18-Jun-2023 11:17:58 America/Chicago] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [2002] Connection refused in /home4/shiroxsj/public_html/gst/includes/config.php:9
+Stack trace:
+#0 /home4/shiroxsj/public_html/gst/includes/config.php(9): PDO->__construct('mysql:host=loca...', 'root', '')
+#1 /home4/shiroxsj/public_html/gst/index.php(2): include('/home4/shiroxsj...')
+#2 {main}
+  thrown in /home4/shiroxsj/public_html/gst/includes/config.php on line 9
+[18-Jun-2023 11:18:31 America/Chicago] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [2002] Connection refused in /home4/shiroxsj/public_html/gst/includes/config.php:9
+Stack trace:
+#0 /home4/shiroxsj/public_html/gst/includes/config.php(9): PDO->__construct('mysql:host=loca...', 'root', '')
+#1 /home4/shiroxsj/public_html/gst/index.php(2): include('/home4/shiroxsj...')
+#2 {main}
+  thrown in /home4/shiroxsj/public_html/gst/includes/config.php on line 9
+[18-Jun-2023 19:34:06 America/Chicago] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [2002] Connection refused in /home4/shiroxsj/public_html/gst/includes/config.php:9
+Stack trace:
+#0 /home4/shiroxsj/public_html/gst/includes/config.php(9): PDO->__construct('mysql:host=loca...', 'root', '')
+#1 /home4/shiroxsj/public_html/gst/index.php(2): include('/home4/shiroxsj...')
+#2 {main}
+  thrown in /home4/shiroxsj/public_html/gst/includes/config.php on line 9
